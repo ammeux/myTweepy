@@ -1,0 +1,54 @@
+<html>
+<head>
+    <title>Streamer</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/main.css') }}">
+</head>
+<body>
+    <header>
+        <div class="nav">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/newTweet">Tweet</a></li>
+                <li><a class="active" href="/streamer">Streamer</a></li>
+                <li><a href="/insight">Insight</a></li>
+            </ul>
+        </div>
+    </header>
+    <form id="emit" action="" method="POST">
+        <input type="text" class="targetname" placeholder="Search" />
+        <input type="submit" value="Echo"/>
+    </form>
+    <form id="disconnect" method="POST" action="#">
+        <input type="submit" value="Disconnect">
+    </form>
+
+    <h3 style='color: #ccc;font-size: 30px;'>No message yet..</h3>
+    <div class="message_holder"></div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+    <script type="text/javascript">
+      var socket = io.connect('http://' + document.domain + ':' + location.port);
+      socket.on( 'connect', function() {
+          var form = $( 'form#emit' ).on( 'submit', function( e ) {
+              e.preventDefault()
+              let target_name = $('input.targetname').val()
+              socket.emit('launchStream', {
+                  targetname: target_name
+              })
+          })
+      })
+      $('form#disconnect').submit(function (event) {
+          socket.emit('stopStream');
+          return false;
+      });
+      socket.on( 'my response', function( msg ) {
+        if( typeof msg.message !== 'undefined' ) {
+          $( 'h3' ).remove()
+          $('div.message_holder').prepend('<div class="container"><img src="' + msg.message.user.profile_image_url + '" class="img-rounded" alt="Avatar" height="52" width="42"><p>' + msg.message.text + '<span class="time-right">' + msg.message.favorite_count + ' likes</span></div>')
+            
+        }
+      })
+    </script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!doctype html>
+{% from "_formhelpers.html" import render_field %}
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/main.css') }}">
+</head>
+<body>
+    <header>
+        <div class="nav">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a class="active" href="/newTweet">Tweet</a></li>
+                <li><a href="/streamer">Streamer</a></li>
+                <li><a href="/insight">Insight</a></li>
+            </ul>
+        </div>
+    </header>
+    <form autocomplete="off" method=post>
+        <dl>
+            {{ render_field(form.message) }}
+        </dl>
+        <p><input type=submit value=Tweet>
+    </form>
+</body>

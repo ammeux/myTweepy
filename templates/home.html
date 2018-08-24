@@ -1,0 +1,26 @@
+<!doctype html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/main.css') }}">
+    </head>
+    <body>
+        <header>
+            <div class="nav">
+                <ul>
+                    <li><a class="active" href="/">Home</a></li>
+                    <li><a href="/newTweet">Tweet</a></li>
+                    <li><a href="/streamer">Streamer</a></li>
+                    <li><a href="/insight">Insight</a></li>
+                </ul>
+            </div>
+        </header>
+    {% for k, v in tweets.items() %}
+    <div class="container">
+        <img src="{{ v["user"]["profile_image_url"] }}" class="img-rounded" alt="Avatar" height="52" width="42">
+        <p>{{ v["text"] }}</p>
+        {% if 'media' in v.entities %}
+            <img src="{{ v["entities"]["media"][0]["media_url_https"]}}" height="200" width="400">
+        {% endif %}
+        <span class="time-right">{{v["favorite_count"]}} likes</span>
+    </div>
+    {% endfor %}
+    </body>
